@@ -1,0 +1,62 @@
+#!/bin/bash
+
+set -o nounset
+set -o errexit
+set -o pipefail
+[[ "${TRACE:-}" != "" ]] && set -o xtrace
+
+BINPATH="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
+BASEPATH="${BINPATH}/.."
+
+printerr() {
+    echo "${@}" >&2
+}
+
+check_inputs() {
+    if [ -z "${IMAGE:-}" ]; then
+        printerr "You have to provide the IMAGE to build."
+        exit 1
+    fi
+
+    if [ ! -e "${BASEPATH}/${IMAGE}/Dockerfile" ]; then
+        printerr "There's no Dockerfile in ${BASEPATH}/${IMAGE}."
+        exit 1
+    fi
+
+    if [ -z "${VERSION:-}" ]; then
+        printerr "You have to provide the VERSION built."
+        exit 1
+    fi
+
+    if ! [[ "${VERSION}" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+        printerr "You have to provide a VERSION with a valid SemVer format."
+        exit 1
+    fi
+}
+
+build_args() {
+    if [ "${IMAGE}" == "phive" ]; then
+        echo "--build-arg PHIVE_VERSION=$(echo "${VERSION}" | cut -c 2-)"
+    fi
+}
+
+build() {
+    local no_cache=""
+
+    if [ -n "${NO_CACHE:-}" ]; then
+        no_cache="--no-cache"
+    fi
+
+    local args="$(build_args)"
+
+    cd ${IMAGE}
+    docker build \
+        -t knplabs/${IMAGE}:${VERSION} \
+        --squash \
+        ${no_cache} \
+        ${args} \
+        .
+}
+
+check_inputs
+build
