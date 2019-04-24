@@ -40,6 +40,10 @@ build_args() {
     if [ "${IMAGE}" == "phive" ]; then
         echo "--build-arg PHIVE_VERSION=$(echo "${VERSION}" | cut -c 2-)"
     fi
+
+    if [ "${IMAGE}" == "php-cs-fixer" ]; then
+        echo "--build-arg PHP_CS_FIXER_VERSION=$(echo "${VERSION}" | cut -c 2-)"
+    fi
 }
 
 build_dir() {
