@@ -1,0 +1,38 @@
+#!/bin/bash
+
+set -o nounset
+set -o errexit
+set -o pipefail
+[[ "${TRACE:-}" != "" ]] && set -o xtrace
+
+printerr() {
+    echo "${@}" >&2
+}
+
+check_inputs() {
+    if [ -z "${IMAGE:-}" ]; then
+        printerr "You have to provide the IMAGE to build."
+        exit 1
+    fi
+
+    if [ -z "${VERSION:-}" ]; then
+        printerr "You have to provide the VERSION built."
+        exit 1
+    fi
+}
+
+ensure_tag_doesnt_exist() {
+    if [ -z "${FORCE:-}" ] && $(docker pull knplabs/${IMAGE}:${VERSION} 2>&1 >/dev/null); then
+        printerr "Docker image knplabs/${IMAGE}:${VERSION} already exists on Docker hub. You can set FORCE to force push though."
+        exit 1
+    fi
+}
+
+push() {
+    cd ${IMAGE}
+    docker push knplabs/${IMAGE}:${VERSION}
+}
+
+check_inputs
+ensure_tag_doesnt_exist
+push
