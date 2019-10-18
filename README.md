@@ -26,3 +26,10 @@ IMAGE=php-cs-fixer VERSION=v2.14.2 make push
 
 You have to provide the `IMAGE` and `VERSION` to push. If the image already
 exists on the remote repo, it will fail. You can force push by adding `FORCE=y`.
+
+------ 
+
+Please read [this post](https://knplabs.com/en/blog/news-for-our-foss-projects-maintenance) first.
+
+This library is maintained by the following people (alphabetically sorted) :
+- [NiR-](https://github.com/NiR-)
