@@ -7,7 +7,7 @@
 
 | Phive version | PHP version |
 |---------------|-------------|
-| v0.12.1       | 7.3         |
+| v0.12.4       | 7.3         |
 
 ## How to use?
 
@@ -19,7 +19,7 @@ FROM knplabs/phive as base
 
 RUN phive install \
         --trust-gpg-keys 'E82B2FB314E9906E' \
-        "php-cs-fixer:v2.14.2"
+        "php-cs-fixer:v2.15.3"
 
 ######################
 

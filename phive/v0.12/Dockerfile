@@ -1,4 +1,4 @@
-FROM php:7.3
+FROM php:7.3-stretch
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
@@ -18,7 +18,7 @@ RUN export BASE_URL="https://github.com/phar-io/phive/releases/download/${PHIVE_
 
 RUN useradd docker -d /home/docker -u 1000 && \
     mkdir -p /home/docker/opcache /home/docker/composer /app && \
-    chown -R docker:docker /home/docker /app 
+    chown -R docker:docker /home/docker /app
 
 USER 1000
 WORKDIR /home/docker
