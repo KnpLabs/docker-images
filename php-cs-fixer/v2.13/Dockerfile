@@ -1,4 +1,4 @@
-FROM knplabs/phive as base
+FROM knplabs/phive:v0.12.4 as base
 
 ARG PHP_CS_FIXER_VERSION
 
@@ -10,7 +10,7 @@ RUN phive install \
 
 FROM php:7.2 as php-cs-fixer
 
-COPY --from=base /root/.phive/phars/php-cs-fixer.phar /usr/local/bin/php-cs-fixer
+COPY --from=base /home/docker/tools/php-cs-fixer /usr/local/bin/php-cs-fixer
 
 USER 1000
 WORKDIR /workdir
